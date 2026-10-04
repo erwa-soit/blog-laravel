@@ -1,10 +1,11 @@
 <section class="p-3 sm:p-5 antialiased">
+    <h2 class="text-xl font-semibold pl-4 mb-4">Post by: {{ Auth::user()->name }}</h2>
     <div class="max-w-screen-xl px-4">
         <div class="bg-white dark:bg-gray-800 relative border sm:rounded-lg overflow-hidden">
             <div class="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <div class="w-full md:w-1/2">
-                    <form class="flex items-center">
-                        <label for="simple-search" class="sr-only">Search</label>
+                    <form class="flex items-center" action="" method="GET">
+                        <label for="simple-search" class="sr-only">Search post</label>
                         <div class="relative w-full">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -14,9 +15,9 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <input type="text" id="simple-search"
+                            <input type="text" id="simple-search" name="keyword"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Search" required="">
+                                placeholder="Search post">
                         </div>
                     </form>
                 </div>
@@ -40,7 +41,6 @@
                         <tr>
                             <th scope="col" class="px-4 py-4">#</th>
                             <th scope="col" class="px-4 py-3">Title</th>
-                            <th scope="col" class="px-4 py-3">Author</th>
                             <th scope="col" class="px-4 py-3">Category</th>
                             <th scope="col" class="px-4 py-3">Published At</th>
                             <th scope="col" class="px-4 py-3">
@@ -55,7 +55,6 @@
                                     class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $loop->iteration }}</th>
                                 <td class="px-4 py-3">{{ $post->title }}</td>
-                                <td class="px-4 py-3">{{ $post->author->name }}</td>
                                 <td class="px-4 py-3">{{ $post->category->name }}</td>
                                 <td class="px-4 py-3">{{ $post->created_at->diffForHumans() }}</td>
                                 <td class="px-4 py-3 flex items-center justify-end">
@@ -71,7 +70,8 @@
                                     </button>
                                     <div id="post-{{ $post->id }}-dropdown"
                                         class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                                        <ul class="py-1 text-sm" aria-labelledby="post-{{ $post->id }}-dropdown-button">
+                                        <ul class="py-1 text-sm"
+                                            aria-labelledby="post-{{ $post->id }}-dropdown-button">
                                             <li>
                                                 <button type="button" data-modal-target="updateProductModal"
                                                     data-modal-toggle="updateProductModal"
@@ -87,8 +87,8 @@
                                                 </button>
                                             </li>
                                             <li>
-                                                <button type="button" data-modal-target="readProductModal"
-                                                    data-modal-toggle="readProductModal"
+                                                <a href= "/dashboard/{{ $post->slug }}" data-modal-target="readProductModal1"
+                                                    data-modal-toggle="readProductModal1"
                                                     class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
                                                     <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
                                                         viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -97,7 +97,7 @@
                                                             d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
                                                     </svg>
                                                     Show post
-                                                </button>
+                                                </a>
                                             </li>
                                             <li>
                                                 <button type="button" data-modal-target="deleteModal"
@@ -120,9 +120,11 @@
                     </tbody>
                 </table>
             </div>
-            <div class="p-3">
-            {{ $posts->links() }}
-            </div>
+            @if ($posts->hasPages())
+                <div class="p-3">
+                    {{ $posts->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </section>
@@ -322,7 +324,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     <button type="button"
-                        class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
