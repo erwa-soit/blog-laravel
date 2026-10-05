@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use function PHPUnit\Framework\returnArgument;
-
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'slug', 'author', 'body'];
+    // protected $fillable = ['title', 'author_id', 'category_id','slug', 'body'];
 // ini yang boleh di isi sisanya diluar itu tidak boleh diisi
+
+    protected $guarded = ['id'];
 
     protected $with = ['author', 'category'];
 
