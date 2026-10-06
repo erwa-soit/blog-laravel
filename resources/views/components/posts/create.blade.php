@@ -1,10 +1,14 @@
+@push('style')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+@endpush
+
 <div class="max-w-4xl relative p-4 bg-white rounded-lg border dark:bg-gray-800 sm:p-5">
     <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Add Post</h3>
     </div>
 
     {{-- Validation Error --}}
-    {{-- @if($errors->any())
+    {{-- @if ($errors->any())
     <div class="flex p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle"
         role="alert">
         <svg class="w-4 h-4 me-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -25,16 +29,16 @@
 @endif --}}
 
     <!-- Modal body -->
-    <form action="/dashboard" method="POST">
+    <form action="/dashboard" method="POST" id="post-form">
         @csrf
         <div class="mb-4">
             <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
             <input type="text" name="title" id="title"
                 class="@error('title') bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 @enderror border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Type post title" autofocus value="{{ old('title') }}">
-                @error('title')
-                    <p class="mt-2.5 text-xs text-fg-danger-strong">{{ $message }}</p>
-                @enderror
+            @error('title')
+                <p class="mt-2.5 text-xs text-fg-danger-strong">{{ $message }}</p>
+            @enderror
         </div>
         <div class="mb-4">
             <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
@@ -46,17 +50,18 @@
                 @endforeach
             </select>
             @error('category_id')
-                    <p class="mt-2.5 text-xs text-fg-danger-strong">{{ $message }}</p>
-                @enderror
+                <p class="mt-2.5 text-xs text-fg-danger-strong">{{ $message }}</p>
+            @enderror
         </div>
         <div class="mb-4">
             <label for="body" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Body</label>
             <textarea id="body" name="body" rows="4"
-                class="@error('body') bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 @enderror block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                class="hidden @error('body') bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 @enderror block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Write post body here">{{ old('body') }}</textarea>
-                @error('body')
-                    <p class="mt-2.5 text-xs text-fg-danger-strong">{{ $message }}</p>
-                @enderror
+            <div id="editor"></div>
+            @error('body')
+                <p class="mt-2.5 text-xs text-fg-danger-strong">{{ $message }}</p>
+            @enderror
         </div>
         <div class="flex gap-2">
             <button type="submit"
@@ -77,3 +82,27 @@
     </form>
 </div>
 </div>
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script>
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Write post body here'
+        });
+
+        const postForm = document.querySelector('#post-form');
+        const postBody = document.querySelector('#body');
+        const quillEditor = document.querySelector('#editor');
+
+        postForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const content = quillEditor.children[0].innerHTML;
+            postBody.value = content;
+
+            this.submit();
+
+        });
+    </script>
+@endpush

@@ -26,7 +26,7 @@ URL: https://flowbite.com/docs/components/typography/
                     <address class="flex items-center mb-6 not-italic">
                         <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                             <img class="mr-4 w-16 h-16 rounded-full"
-                                src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                                src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/avatar.png') }}"
                                 alt="{{ $post->author->name }}">
                             <div>
                                 <a href="/posts?author={{ $post->author->username }}" rel="author"
@@ -48,9 +48,9 @@ URL: https://flowbite.com/docs/components/typography/
                         {{ $post['title'] }}
                     </h1>
                 </header>
-                <p>
-                    {{ $post['body'] }}
-                </p>
+                <div>
+                    {{!! $post['body'] !!}}
+                </div>
             </article>
         </div>
     </main>

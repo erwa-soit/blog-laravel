@@ -4,11 +4,9 @@
         <form class="mb-8 max-w-md mx-auto">
             @if (request('category'))
                 <input type="hidden" name="category" value="{{ request('category') }}">
-
             @endif
             @if (request('author'))
                 <input type="hidden" name="author" value="{{ request('author') }}">
-
             @endif
             <label for="search" class="block mb-2.5 text-sm font-medium text-heading sr-only ">Search</label>
             <div class="relative">
@@ -44,13 +42,16 @@
                         <span class="text-sm">{{ $post->created_at->diffForHumans() }}</span>
                     </div>
                     <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><a
-                            href="/posts/{{ $post['slug'] }}">{{ $post['title'] }}</a></h2>
-                    <p class="mb-5 font-light text-gray-500 dark:text-gray-400">{{ Str::limit($post->body, 100) }}</p>
+                            href="/posts/{{ $post['slug'] }}">{{ $post['title'] }}
+                        </a>
+                    </h2>
+                    <div class="mb-5 font-light text-gray-500 dark:text-gray-400">
+                        {!! Str::limit($post->body, 100) !!}</div>
                     <div class="flex justify-between items-center">
                         <a href="/posts?author={{ $post->author->username }}">
                             <div class="flex items-center space-x-4">
                                 <img class="w-7 h-7 rounded-full"
-                                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+                                    src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/avatar.png') }}"
                                     alt="{{ $post->author->name }}" />
                                 <span class="font-medium text-xs dark:text-white">
                                     {{ $post->author->name }}
@@ -70,7 +71,7 @@
                         </a>
                     </div>
                 </article>
-                @empty
+            @empty
                 <div>
                     <p class="font-semibold text-xl my-4">Article not found!</p>
                     <a href="/posts" class="block text-blue-500 hover:underline">&laquo; Back to all posts.</a>

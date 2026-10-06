@@ -32,8 +32,8 @@
                                 id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="h-8 w-8 rounded-full object-cover"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt="User avatar">
+                                    src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('img/avatar.png') }}"
+                                    alt="{{ Auth::user()->name }}">
                                 <div class="text-gray-300 text-sm font-medium ml-3">
                                     {{ Auth::user()->name }}
                                 </div>
@@ -64,9 +64,9 @@
                             tabindex="-1">
 
                             <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                role="menuitem" tabindex="-1">Your Profile</a>
+                                role="menuitem" tabindex="-1">Profile</a>
                             <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                role="menuitem" tabindex="-1">Settings</a>
+                                role="menuitem" tabindex="-1">Dashboard</a>
                             <form method="POST" action="/logout">
                                 @csrf
                                 <button type="submit"
@@ -120,7 +120,7 @@
                 <div class="flex items-center px-5">
                     <div class="shrink-0">
                         <img class="h-10 w-10 rounded-full object-cover"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('img/avatar.png') }}"
                             alt="{{ Auth::user()->name }}">
                     </div>
                     <div class="ml-3">
